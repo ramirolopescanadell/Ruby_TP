@@ -1,3 +1,4 @@
+require 'fileutils'
 module RN
   module Commands
     autoload :Books, 'rn/commands/books'
@@ -5,6 +6,12 @@ module RN
     autoload :Version, 'rn/commands/version'
 
     extend Dry::CLI::Registry
+
+    #Si el directorio "my_rns" no existe entonces lo creo.
+    
+    if(!File.directory?(".my_rns"))
+      FileUtils.mkdir_p(".my_rns")
+    end
 
     register 'books', aliases: ['b'] do |prefix|
       prefix.register 'create', Books::Create

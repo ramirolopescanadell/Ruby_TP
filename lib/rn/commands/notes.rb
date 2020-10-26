@@ -14,8 +14,22 @@ module RN
         ]
 
         def call(title:, **options)
-          book = options[:book]
-          warn "TODO: Implementar creación de la nota con título '#{title}' (en el libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          #Si no llegó libro por parametro entonces uso el global
+          book = options[:book].nil? ? "global" : options[:book]
+
+          #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
+          return warn "El libro '#{book}' no existe " unless File.directory?(".my_rns/#{book}")
+          
+          #Removiendo las barras para que no cree archivos en subdirectorios que no existen.
+          title = title.gsub("/", "_")
+
+          path = ".my_rns/#{book}/#{title}"
+          if( File.exist?(path))
+            warn "La nota con nombre '#{title}' ya exista, elija otro nombre"
+          else
+            warn "creando nota con nombre '#{title}' en libro '#{book}'"
+            File.open(path,"w+")
+          end        
         end
       end
 
@@ -32,8 +46,20 @@ module RN
         ]
 
         def call(title:, **options)
-          book = options[:book]
-          warn "TODO: Implementar borrado de la nota con título '#{title}' (del libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+
+          #Si no llegó libro por parametro entonces uso el global
+          book = options[:book].nil? ? "global" : options[:book]
+
+          #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
+          return warn "El libro '#{book}' no existe " unless File.directory?(".my_rns/#{book}")
+          
+          path = ".my_rns/#{book}/#{title}"
+          if( File.exist?(path))
+            warn "Eliminando la nota con nombre '#{title}' en libro '#{book}'"
+            File.delete(path)
+          else
+            warn "La nota con nombre '#{title}' en el libro '#{book}' no existe"
+          end 
         end
       end
 
@@ -51,7 +77,7 @@ module RN
 
         def call(title:, **options)
           book = options[:book]
-          warn "TODO: Implementar modificación de la nota con título '#{title}' (del libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          
         end
       end
 
@@ -69,8 +95,28 @@ module RN
         ]
 
         def call(old_title:, new_title:, **options)
-          book = options[:book]
-          warn "TODO: Implementar cambio del título de la nota con título '#{old_title}' hacia '#{new_title}' (del libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          #Si no llegó libro por parametro entonces uso el global
+          book = options[:book].nil? ? "global" : options[:book]
+
+          #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
+          return warn "El libro '#{book}' no existe " unless File.directory?(".my_rns/#{book}")
+
+          old_path = ".my_rns/#{book}/#{old_title}"
+          
+          if(File.exist?(old_path))
+            #Removiendo las barras para que no cree archivos en subdirectorios que no existen.
+            new_title = new_title.gsub("/", "_")
+
+            new_path = ".my_rns/#{book}/#{new_title}"
+            if( File.exist?(new_path))
+              warn "La nota con nombre '#{new_title}' ya exista, elija otro nombre"
+            else
+              warn "La nota '#{old_title}' ahora se llama '#{new_title}'"
+              File.rename(old_path, new_path)
+            end
+          else
+            warn "La nota '#{old_title}' no existe"
+          end
         end
       end
 
@@ -90,7 +136,8 @@ module RN
         def call(**options)
           book = options[:book]
           global = options[:global]
-          warn "TODO: Implementar listado de las notas del libro '#{book}' (global=#{global}).\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          #warn "TODO: Implementar listado de las notas del libro '#{book}' (global=#{global}).\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          puts Dir.glob(".my_rns/#{book}**/*").map{|note| note.gsub(".my_rns/", " ")}   
         end
       end
 
@@ -107,8 +154,19 @@ module RN
         ]
 
         def call(title:, **options)
-          book = options[:book]
-          warn "TODO: Implementar vista de la nota con título '#{title}' (del libro '#{book}').\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          #Si no llegó libro por parametro entonces uso el global
+          book = options[:book].nil? ? "global" : options[:book]
+          
+          #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
+          return warn "El libro '#{book}' no existe " unless File.directory?(".my_rns/#{book}")
+          
+          path = ".my_rns/#{book}/#{title}"
+          
+          if(File.exist?(path))
+            puts File.read(path)
+          else
+            warn "La nota '#{title}' no existe"
+          end
         end
       end
     end

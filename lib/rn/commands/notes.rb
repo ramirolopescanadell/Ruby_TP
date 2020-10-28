@@ -28,7 +28,7 @@ module RN
             warn "La nota con nombre '#{title}' ya exista, elija otro nombre"
           else
             warn "creando nota con nombre '#{title}' en libro '#{book}'"
-            File.open(path,"w+")
+            system("vim",path)
           end        
         end
       end
@@ -76,8 +76,19 @@ module RN
         ]
 
         def call(title:, **options)
-          book = options[:book]
+          #Si no llegó libro por parametro entonces uso el global
+          book = options[:book].nil? ? "global" : options[:book]
+
+          #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
+          return warn "El libro '#{book}' no existe " unless File.directory?(".my_rns/#{book}")
+          path = ".my_rns/#{book}/#{title}"
           
+          if( File.exist?(path))
+            warn "Editando nota con nombre '#{title}'"
+            system("vim",path)
+          else
+            warn "No existe una nota llamada '#{title}' en el libro '#{book}'"
+          end        
         end
       end
 

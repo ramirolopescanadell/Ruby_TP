@@ -23,7 +23,7 @@ module RN
           #Removiendo las barras para que no cree archivos en subdirectorios que no existen.
           title = title.gsub("/", "_")
 
-          path = ".my_rns/#{book}/#{title}"
+          path = ".my_rns/#{book}/#{title}.rn"
           if( File.exist?(path))
             warn "La nota con nombre '#{title}' ya exista, elija otro nombre"
           else
@@ -53,7 +53,7 @@ module RN
           #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
           return warn "El libro '#{book}' no existe " unless File.directory?(".my_rns/#{book}")
           
-          path = ".my_rns/#{book}/#{title}"
+          path = ".my_rns/#{book}/#{title}.rn"
           if( File.exist?(path))
             warn "Eliminando la nota con nombre '#{title}' en libro '#{book}'"
             File.delete(path)
@@ -81,7 +81,7 @@ module RN
 
           #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
           return warn "El libro '#{book}' no existe " unless File.directory?(".my_rns/#{book}")
-          path = ".my_rns/#{book}/#{title}"
+          path = ".my_rns/#{book}/#{title}.rn"
           
           if( File.exist?(path))
             warn "Editando nota con nombre '#{title}'"
@@ -112,13 +112,13 @@ module RN
           #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
           return warn "El libro '#{book}' no existe " unless File.directory?(".my_rns/#{book}")
 
-          old_path = ".my_rns/#{book}/#{old_title}"
+          old_path = ".my_rns/#{book}/#{old_title}.rn"
           
           if(File.exist?(old_path))
             #Removiendo las barras para que no cree archivos en subdirectorios que no existen.
             new_title = new_title.gsub("/", "_")
 
-            new_path = ".my_rns/#{book}/#{new_title}"
+            new_path = ".my_rns/#{book}/#{new_title}.rn"
             if( File.exist?(new_path))
               warn "La nota con nombre '#{new_title}' ya exista, elija otro nombre"
             else
@@ -145,10 +145,13 @@ module RN
         ]
 
         def call(**options)
-          book = options[:book]
-          global = options[:global]
-          #warn "TODO: Implementar listado de las notas del libro '#{book}' (global=#{global}).\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
-          puts Dir.glob(".my_rns/#{book}**/*").map{|note| note.gsub(".my_rns/", " ")}   
+          book = options[:global] ? "global" : options[:book] 
+          puts "Listando notas:"
+          puts Dir.glob(".my_rns/#{book}**/*").map {|note| 
+            aux = note[8..-1].gsub(".rn"," ")
+            aux.insert(0,"─ ") unless aux.include?("/") 
+            aux
+          }
         end
       end
 
@@ -171,7 +174,7 @@ module RN
           #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
           return warn "El libro '#{book}' no existe " unless File.directory?(".my_rns/#{book}")
           
-          path = ".my_rns/#{book}/#{title}"
+          path = ".my_rns/#{book}/#{title}.rn"
           
           if(File.exist?(path))
             puts File.read(path)

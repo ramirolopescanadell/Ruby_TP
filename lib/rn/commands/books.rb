@@ -1,3 +1,4 @@
+require 'fileutils'
 module RN
   module Commands
     module Books
@@ -12,7 +13,18 @@ module RN
         ]
 
         def call(name:, **)
-          warn "TODO: Implementar creación del cuaderno de notas con nombre '#{name}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          begin
+            name = name.gsub("/", "_")
+            Dir.mkdir(".my_rns/#{name}")
+          rescue Errno::EEXIST
+            warn "El libro con nombre '#{name}' ya existe"
+            return :exist
+          rescue
+            warn "Ha ocurrido un error"
+            raise
+          else
+            puts "El libro '#{name}' fue creado con exito"
+          end 
         end
       end
 
@@ -29,8 +41,23 @@ module RN
         ]
 
         def call(name: nil, **options)
-          global = options[:global]
-          warn "TODO: Implementar borrado del cuaderno de notas con nombre '#{name}' (global=#{global}).\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          begin
+            if(options[:global])
+              path = ".my_rns/global"
+              Dir.each_child(path) {|note| File.delete("#{path}/#{note}") }
+            else 
+              (name.eql? "global") ? (raise  "CantDeleteGlobal") : FileUtils.rm_rf(".my_rns/#{name}")
+            end
+          rescue RuntimeError
+            warn "No se puede eliminar la carpeta 'global' "
+            return :error_1
+          rescue
+            warn "ocurrio un error"
+            raise
+            return :error_n
+          else
+            puts options[:global] ? "Vaciando carpeta global" : "Eliminando libro con nombre '#{name}'" 
+          end
         end
       end
 
@@ -42,7 +69,8 @@ module RN
         ]
 
         def call(*)
-          warn "TODO: Implementar listado de los cuadernos de notas.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          puts "Listando libros: "
+          puts Dir.glob(".my_rns/**").map{|book| book.gsub(".my_rns/","")} 
         end
       end
 
@@ -59,7 +87,24 @@ module RN
         ]
 
         def call(old_name:, new_name:, **)
-          warn "TODO: Implementar renombrado del cuaderno de notas con nombre '#{old_name}' para que pase a llamarse '#{new_name}'.\nPodés comenzar a hacerlo en #{__FILE__}:#{__LINE__}."
+          begin
+            old_path = ".my_rns/#{old_name}"
+            new_path = ".my_rns/#{new_name}"
+            name = new_name.gsub("/", "_")
+            raise  "No se puede modificar la carpeta global" if (name.eql? "global") 
+            Dir.exist?(new_path) ? (raise "El libro con nombre '#{new_name}' ya existe" ) : File.rename(old_path, new_path)
+          rescue RuntimeError => e
+            warn e.message
+            return :exist
+          rescue Errno::ENOENT
+            warn "El libro que quiere modificar no existe"
+            return :not_exist
+          rescue
+            warn "Ha ocurrido un error"
+            raise
+          else
+            puts "El libro '#{old_name}' ahora se llama '#{new_name}'"
+          end 
         end
       end
     end

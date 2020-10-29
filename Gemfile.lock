@@ -1,15 +1,33 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    colorputs (0.2.3)
     concurrent-ruby (1.1.7)
     dry-cli (0.6.0)
       concurrent-ruby (~> 1.0)
+    pastel (0.8.0)
+      tty-color (~> 0.5)
+    tty-color (0.5.2)
+    tty-cursor (0.7.1)
+    tty-editor (0.6.0)
+      tty-prompt (~> 0.22)
+    tty-prompt (0.22.0)
+      pastel (~> 0.8)
+      tty-reader (~> 0.8)
+    tty-reader (0.8.0)
+      tty-cursor (~> 0.7)
+      tty-screen (~> 0.8)
+      wisper (~> 2.0)
+    tty-screen (0.8.1)
+    wisper (2.0.1)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  colorputs
   dry-cli (~> 0.6)
+  tty-editor (~> 0.6)
 
 RUBY VERSION
    ruby 2.7.2p137

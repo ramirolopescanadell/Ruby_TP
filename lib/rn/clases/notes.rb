@@ -10,7 +10,6 @@ module RN
 				return ".my_rns/#{book}/#{title}.rn"
 			end
 
-		
 			def self.create(title, **options)
 				#Si no llegó libro por parametro entonces uso el global
 				book = options[:book].nil? ? "global" : options[:book]
@@ -92,7 +91,7 @@ module RN
 	          puts "Listando notas:"
 	          Dir.glob(".my_rns/#{book}**/*").map {|note| 
 	            aux = note[8..-1].gsub(".rn"," ")
-	            color = aux.include?("/") ? :green : :red
+	            color = aux.include?("/") ? :cyan : :red
 	            puts aux, color 
 	          }				
 			end

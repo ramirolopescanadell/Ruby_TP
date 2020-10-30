@@ -1,4 +1,3 @@
-require 'fileutils'
 module RN
   module Commands
     module Books
@@ -13,18 +12,7 @@ module RN
         ]
 
         def call(name:, **)
-          begin
-            name = name.gsub("/", "_")
-            Dir.mkdir(".my_rns/#{name}")
-          rescue Errno::EEXIST
-            warn "El libro con nombre '#{name}' ya existe"
-            return :exist
-          rescue
-            warn "Ha ocurrido un error"
-            raise
-          else
-            puts "El libro '#{name}' fue creado con exito"
-          end 
+          RN::Models::Book.create(name)
         end
       end
 
@@ -41,23 +29,7 @@ module RN
         ]
 
         def call(name: nil, **options)
-          begin
-            if(options[:global])
-              path = ".my_rns/global"
-              Dir.each_child(path) {|note| File.delete("#{path}/#{note}") }
-            else 
-              (name.eql? "global") ? (raise  "CantDeleteGlobal") : FileUtils.rm_rf(".my_rns/#{name}")
-            end
-          rescue RuntimeError
-            warn "No se puede eliminar la carpeta 'global' "
-            return :error_1
-          rescue
-            warn "ocurrio un error"
-            raise
-            return :error_n
-          else
-            puts options[:global] ? "Vaciando carpeta global" : "Eliminando libro con nombre '#{name}'" 
-          end
+          RN::Models::Book.delete(name,**options)
         end
       end
 
@@ -69,8 +41,7 @@ module RN
         ]
 
         def call(*)
-          puts "Listando libros: "
-          puts Dir.glob(".my_rns/**").map{|book| book.gsub(".my_rns/","")} 
+          RN::Models::Book.list()
         end
       end
 
@@ -87,24 +58,7 @@ module RN
         ]
 
         def call(old_name:, new_name:, **)
-          begin
-            old_path = ".my_rns/#{old_name}"
-            new_path = ".my_rns/#{new_name}"
-            name = new_name.gsub("/", "_")
-            raise  "No se puede modificar la carpeta global" if (name.eql? "global") 
-            Dir.exist?(new_path) ? (raise "El libro con nombre '#{new_name}' ya existe" ) : File.rename(old_path, new_path)
-          rescue RuntimeError => e
-            warn e.message
-            return :exist
-          rescue Errno::ENOENT
-            warn "El libro que quiere modificar no existe"
-            return :not_exist
-          rescue
-            warn "Ha ocurrido un error"
-            raise
-          else
-            puts "El libro '#{old_name}' ahora se llama '#{new_name}'"
-          end 
+          RN::Models::Book.rename(old_name, new_name)
         end
       end
     end

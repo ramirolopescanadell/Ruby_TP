@@ -24,14 +24,18 @@ module RN
 				end 
 			end
 
+			def self.confirmar(path)
+				puts "¿Eliminar libro global ubicado en #{path}?"
+				puts "Si / No"
+				opcion = $stdin.gets.chomp
+				return opcion.downcase == "si"
+			end
+
 			def self.delete(name=nil,**options)
 				begin
 				  if(options[:global])
-				  	puts "¿Eliminar libro ubicado en #{path}/#{note}?"
-				  	puts "Si / No"
-				  	opcion = gets.chomp
-				  	if(opcion = "Si")
-				    	path = self.create_path("global")
+				  	path = self.create_path("global")
+				  	if(self.confirmar(path))
 				    	Dir.each_child(path) {|note| File.delete("#{path}/#{note}") }
 				    else
 				    	raise "No se borró el libro"
@@ -40,7 +44,15 @@ module RN
 				  	path = self.create_path(name)
 				  	raise "Ingrese nombre del libro a borrar" if name.nil?
 				  	raise "No existe el libro con nombre '#{name}'" unless File.exist?(path) 
-				    (name.eql? "global") ? (raise  "No se puede eliminar la carpeta 'global'") : FileUtils.rm_rf(path)
+				    if (name.eql? "global")  
+				    	raise  "No se puede eliminar la carpeta 'global'"
+				    else
+					  	if(self.confirmar(path))
+				    		FileUtils.rm_rf(path)
+				    	else
+				    		raise "No se borró el libro"
+						end				    	
+				 	end
 				  end
 				rescue RuntimeError => e
 				  warn e.message

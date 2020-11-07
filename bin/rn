@@ -12,5 +12,10 @@ $LOAD_PATH.unshift(File.absolute_path("#{__dir__}/../lib"))
 # Requiere `lib/rn.rb` como punto de partida para cargar todas las definiciones necesarias
 require 'rn'
 
+#Si el directorio "my_rns" no existe entonces lo creo.    
+if(!File.directory?(".my_rns"))
+  FileUtils.mkdir_p(".my_rns")
+end
+
 # Ejecuta, utilizando la gema dry-cli, los comandos que permiten utilizar la herramienta
 Dry::CLI.new(RN::Commands).call

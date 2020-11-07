@@ -4,10 +4,10 @@ require 'colorputs'
 module RN
 	module Models
 		class Note
-
+			extend RN::Models::Validator
 			private
 			def self.create_path(book, title)
-				return ".my_rns/#{book}/#{title}.rn"
+				return "#{RN.my_rns}/#{book}/#{title}.rn"
 			end
 
 			def self.create(title, **options)
@@ -15,10 +15,10 @@ module RN
 				book = options[:book].nil? ? "global" : options[:book]
 
 		        #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
-		        return warn "El libro '#{book}' no existe " unless File.directory?(".my_rns/#{book}")
+		        return warn "El libro '#{book}' no existe " unless File.directory?("#{RN.my_rns}/#{book}")
 		          
-		        #Removiendo las barras para que no cree archivos en subdirectorios que no existen.
-		        title = title.gsub("/", "_")
+		        #Si el titulo posee barras o astericos retorna error.
+		        return warn "El nombre posee caracteres inválidos" if Validator.validate_name(title)
 
 		        path = self.create_path(book,title)
 		        if( File.exist?(path))
@@ -34,7 +34,7 @@ module RN
 		        book = options[:book].nil? ? "global" : options[:book]
 
 		        #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
-		        return warn "El libro '#{book}' no existe " unless File.directory?(".my_rns/#{book}")
+		        return warn "El libro '#{book}' no existe " unless File.directory?("#{RN.my_rns}/#{book}")
 		          
 		        path = self.create_path(book,title)
 		        if( File.exist?(path))
@@ -50,7 +50,7 @@ module RN
 				book = options[:book].nil? ? "global" : options[:book]
 
 				#Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
-				return warn "El libro '#{book}' no existe " unless File.directory?(".my_rns/#{book}")
+				return warn "El libro '#{book}' no existe " unless File.directory?("#{RN.my_rns}/#{book}")
 				path = self.create_path(book,title)
 				
 				if( File.exist?(path))
@@ -59,20 +59,20 @@ module RN
 				else
 					warn "No existe una nota llamada '#{title}' en el libro '#{book}'"
 				end 
-			end
+		end
 			
 			def self.retitle(old_title, new_title, **options)
 			  #Si no llegó libro por parametro entonces uso el global
 	          book = options[:book].nil? ? "global" : options[:book]
 
 	          #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
-	          return warn "El libro '#{book}' no existe " unless File.directory?(".my_rns/#{book}")
+	          return warn "El libro '#{book}' no existe " unless File.directory?("#{RN.my_rns}/#{book}")
 
 	          old_path = self.create_path(book,old_title)
 	          
 	          if(File.exist?(old_path))
-	            #Removiendo las barras para que no cree archivos en subdirectorios que no existen.
-	            new_title = new_title.gsub("/", "_")
+		        #Si el titulo posee barras o astericos retorna error.
+		        return warn "El nombre posee caracteres inválidos" if Validator.validate_name(new_title)
 
 	            new_path = self.create_path(book,new_title)
 	            if( File.exist?(new_path))
@@ -88,12 +88,12 @@ module RN
 
 			def self.list(**options)
 	          book = options[:global] ? "global" : options[:book] 
+	          path_length = ((RN.my_rns).length) + 1
 	          puts "Listando notas:"
-	          Dir.glob(".my_rns/#{book}**/*").map {|note| 
-	            aux = note[8..-1].gsub(".rn"," ")
-	            color = aux.include?("/") ? :cyan : :red
-	            puts aux, color 
-	          }				
+	          notes = Dir.glob("#{RN.my_rns}/#{book}**/*").map {|note| 
+	            note[path_length..-1].gsub(".rn"," ") 
+	          }
+	          notes.each{|note| puts note ,(note.include?("/") ? :cyan : :red)}			
 			end
 
 			def self.show(title, **options)
@@ -101,7 +101,7 @@ module RN
 				book = options[:book].nil? ? "global" : options[:book]
 				
 				#Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
-				return warn "El libro '#{book}' no existe " unless File.directory?(".my_rns/#{book}")
+				return warn "El libro '#{book}' no existe " unless File.directory?("#{RN.my_rns}/#{book}")
 				
 				path = self.create_path(book,title)
 				

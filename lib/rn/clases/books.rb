@@ -2,22 +2,23 @@ require 'fileutils'
 module RN
 	module Models
 		class Book
-
+			extend RN::Models::Validator
 			private
 			def self.create_path(book)
-				return ".my_rns/#{book}"
+				return "#{RN.my_rns}/#{book}"
 			end
 			
 			def self.create(name, **)
 				begin
-				  name = name.gsub("/", "_")
+		          #Si el titulo posee barras o astericos retorna error.
+		          raise "El nombre posee caracteres inválidos" if Validator.validate_name(name)
 				  Dir.mkdir(self.create_path(name))
 				rescue Errno::EEXIST
 				  warn "El libro con nombre '#{name}' ya existe"
 				  return :exist
-				rescue
-				  warn "Ha ocurrido un error"
-				  raise
+				rescue RuntimeError => e
+				  warn e.message
+				  return :error
 				else
 				  puts "El libro '#{name}' fue creado con exito"
 				end 
@@ -26,8 +27,15 @@ module RN
 			def self.delete(name=nil,**options)
 				begin
 				  if(options[:global])
-				    path = self.create_path("global")
-				    Dir.each_child(path) {|note| File.delete("#{path}/#{note}") }
+				  	puts "¿Eliminar libro ubicado en #{path}/#{note}?"
+				  	puts "Si / No"
+				  	opcion = gets.chomp
+				  	if(opcion = "Si")
+				    	path = self.create_path("global")
+				    	Dir.each_child(path) {|note| File.delete("#{path}/#{note}") }
+				    else
+				    	raise "No se borró el libro"
+					end
 				  else 
 				  	path = self.create_path(name)
 				  	raise "Ingrese nombre del libro a borrar" if name.nil?
@@ -48,14 +56,15 @@ module RN
 
 			def self.list(*)
 	          puts "Listando libros: "
-	          Dir.glob(".my_rns/**").map{|book| puts book.gsub(".my_rns/",""), :red}				
+	          Dir.glob("#{RN.my_rns}/**").map{|book| puts book.gsub("#{RN.my_rns}/",""), :red}				
 			end
 
 			def self.rename(old_name, new_name, **)
 				begin
 				  old_path = self.create_path(old_name)
 				  new_path = self.create_path(new_name)
-				  name = new_name.gsub("/", "_")
+		       	  #Si el titulo posee barras o astericos retorna error.
+		       	  raise "El nombre posee caracteres inválidos" if Validator.validate_name(new_name)
 				  raise  "No se puede modificar la carpeta global" if (old_name.eql? "global") 
 				  Dir.exist?(new_path) ? (raise "El libro con nombre '#{new_name}' ya existe" ) : File.rename(old_path, new_path)
 				rescue RuntimeError => e

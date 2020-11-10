@@ -5,7 +5,7 @@ module RN
 			extend RN::Models::Validator
 			private
 			def self.create_path(book)
-				return "#{RN.my_rns}/#{book}"
+				return "#{Validator.my_rns}/#{book}"
 			end
 			
 			def self.create(name, **)
@@ -24,8 +24,8 @@ module RN
 				end 
 			end
 
-			def self.confirmar(path)
-				puts "¿Eliminar libro global ubicado en #{path}?"
+			def self.confirmar(path,book)
+				puts (book.eql? "global") ? "¿Vaciar libro global ubicado en #{path}?" : "¿Eliminar libro ubicado en #{path}?"
 				puts "Si / No"
 				opcion = $stdin.gets.chomp
 				return opcion.downcase == "si"
@@ -35,7 +35,7 @@ module RN
 				begin
 				  if(options[:global])
 				  	path = self.create_path("global")
-				  	if(self.confirmar(path))
+				  	if(self.confirmar(path,"global"))
 				    	Dir.each_child(path) {|note| File.delete("#{path}/#{note}") }
 				    else
 				    	raise "No se borró el libro"
@@ -47,7 +47,7 @@ module RN
 				    if (name.eql? "global")  
 				    	raise  "No se puede eliminar la carpeta 'global'"
 				    else
-					  	if(self.confirmar(path))
+					  	if(self.confirmar(path,name))
 				    		FileUtils.rm_rf(path)
 				    	else
 				    		raise "No se borró el libro"
@@ -68,7 +68,7 @@ module RN
 
 			def self.list(*)
 	          puts "Listando libros: "
-	          Dir.glob("#{RN.my_rns}/**").map{|book| puts book.gsub("#{RN.my_rns}/",""), :red}				
+	          Dir.glob("#{Validator.my_rns}/**").map{|book| puts book.gsub("#{Validator.my_rns}/",""), :red}				
 			end
 
 			def self.rename(old_name, new_name, **)

@@ -13,8 +13,14 @@ $LOAD_PATH.unshift(File.absolute_path("#{__dir__}/../lib"))
 require 'rn'
 
 #Si el directorio "my_rns" no existe entonces lo creo.    
-if(!File.directory?(".my_rns"))
-  FileUtils.mkdir_p(".my_rns")
+path =  RN::Models::Validator.my_rns
+
+if(!File.directory?(path))
+  FileUtils.mkdir_p(path)
+end
+
+if(!File.directory?("#{path}/global"))
+  FileUtils.mkdir_p("#{path}/global")
 end
 
 # Ejecuta, utilizando la gema dry-cli, los comandos que permiten utilizar la herramienta

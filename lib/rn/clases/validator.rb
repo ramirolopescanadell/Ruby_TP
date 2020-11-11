@@ -8,7 +8,7 @@ module RN
 			end			
 			
 			def self.validate_name(name)
-				return !(name.match? /^[A-Za-z0-9]+$/)
+				return !(name.match? /^[A-Za-z0-9\s]+$/)
 			end
 		end
 	end

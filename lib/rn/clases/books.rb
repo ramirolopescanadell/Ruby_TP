@@ -15,22 +15,13 @@ module RN
 			end
 
 			def exist?()
-				
+				File.directory?("#{Validator.my_rns}/#{name}")
 			end
+			
 			def create()
-				begin
-		          #Si el titulo posee barras o astericos retorna error.
-		          raise "El nombre posee caracteres inválidos" if Validator.validate_name(name)
-				  Dir.mkdir(self.create_path(name))
-				rescue Errno::EEXIST
-				  warn "El libro con nombre '#{name}' ya existe"
-				  return :exist
-				rescue RuntimeError => e
-				  warn e.message
-				  return :error
-				else
-				  puts "El libro '#{name}' fue creado con exito"
-				end 
+			    #Si el titulo posee barras o astericos retorna error.
+			    raise "El nombre posee caracteres inválidos" if Validator.validate_name(name)
+				Dir.mkdir(create_path(name))
 			end
 
 			def confirmar(path,book)

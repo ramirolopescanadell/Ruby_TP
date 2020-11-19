@@ -16,7 +16,13 @@ module RN
         def call(title:, **options)
           #Si no llegó libro por parametro entonces uso el global
           bookName = options[:book].nil? ? "global" : options[:book]
-          nota = RN::Models::Note.new(title,bookName)
+          book = RN::Models::Book.new(bookName)  
+          note = RN::Models::Note.new(title,book.name)  
+          #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
+          return warn "El libro '#{book.name}' no existe " unless book.exist?
+          #Si el titulo posee barras o astericos retorna error.
+          return warn "El nombre posee caracteres inválidos" if note.validate
+          puts note.create        
         end
       end
 

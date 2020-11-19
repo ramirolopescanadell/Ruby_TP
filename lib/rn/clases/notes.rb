@@ -8,31 +8,28 @@ module RN
 			
 			attr_accessor :title, :book
 
-			def initialize(title,  book: nil)
+			def initialize(title,  book=nil)
 			  self.title = title
-			  self.book = book || Book.global
+			  self.book = book || "global"
 			end
 
 			def create_path(book, title)
 				return "#{Validator.my_rns}/#{book}/#{title}.rn"
 			end
 
+			def validate
+				Validator.validate_name(title)
+			end
+
 			def create()
-
-		        #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
-		        return warn "El libro '#{book}' no existe " unless File.directory?("#{Validator.my_rns}/#{book}")
-		          
-		        #Si el titulo posee barras o astericos retorna error.
-		        return warn "El nombre posee caracteres inválidos" if Validator.validate_name(title)
-
-		        path = self.create_path(book,title)
-		        if( File.exist?(path))
-		          warn "La nota con nombre '#{title}' ya exista, elija otro nombre"
-		        else
-		          warn "creando nota con nombre '#{title}' en libro '#{book}'"
-		          TTY::Editor.open(path)
-		        end 
-		      end
+	          path = create_path(book,title)
+		          if( File.exist?(path))
+		          	"La nota con nombre '#{title}' ya exista, elija otro nombre"
+		          else
+		          	TTY::Editor.open(path)
+		          	 "creando nota con nombre '#{title}' en libro '#{book}'"
+		          end 
+	    	  end
 
 		      def self.delete(title, **options)
 		      	#Si no llegó libro por parametro entonces uso el global

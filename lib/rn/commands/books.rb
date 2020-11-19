@@ -13,7 +13,17 @@ module RN
 
         def call(name:, **)
           book =  RN::Models::Book.new(name)
-          book.create
+          begin
+            book.create
+          rescue Errno::EEXIST
+            warn "El libro con nombre '#{name}' ya existe"
+            return :exist
+          rescue RuntimeError => e
+            warn e.message
+            return :error
+          else
+            puts "El libro '#{name}' fue creado con exito"
+          end 
         end
       end
 

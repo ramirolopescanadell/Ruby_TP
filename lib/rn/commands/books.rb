@@ -12,7 +12,8 @@ module RN
         ]
 
         def call(name:, **)
-          RN::Models::Book.create(name)
+          book =  RN::Models::Book.new(name)
+          book.create
         end
       end
 
@@ -29,7 +30,8 @@ module RN
         ]
 
         def call(name: nil, **options)
-          RN::Models::Book.delete(name,**options)
+          book =  RN::Models::Book.new(name)
+          book.delete(**options)
         end
       end
 

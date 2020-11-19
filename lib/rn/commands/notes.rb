@@ -14,7 +14,9 @@ module RN
         ]
 
         def call(title:, **options)
-          RN::Models::Note.create(title,**options)
+          #Si no llegó libro por parametro entonces uso el global
+          bookName = options[:book].nil? ? "global" : options[:book]
+          nota = RN::Models::Note.new(title,bookName)
         end
       end
 

@@ -5,14 +5,19 @@ module RN
 	module Models
 		class Note
 			extend RN::Models::Validator
-			private
-			def self.create_path(book, title)
+			
+			attr_accessor :title, :book
+
+			def initialize(title,  book: nil)
+			  self.title = title
+			  self.book = book || Book.global
+			end
+
+			def create_path(book, title)
 				return "#{Validator.my_rns}/#{book}/#{title}.rn"
 			end
 
-			def self.create(title, **options)
-				#Si no llegó libro por parametro entonces uso el global
-				book = options[:book].nil? ? "global" : options[:book]
+			def create()
 
 		        #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
 		        return warn "El libro '#{book}' no existe " unless File.directory?("#{Validator.my_rns}/#{book}")

@@ -3,12 +3,21 @@ module RN
 	module Models
 		class Book
 			extend RN::Models::Validator
-			private
-			def self.create_path(book)
+
+			attr_accessor :name
+
+			def initialize(name)
+      			self.name = name
+    		end
+
+			def create_path(book)
 				return "#{Validator.my_rns}/#{book}"
 			end
-			
-			def self.create(name, **)
+
+			def exist?()
+				
+			end
+			def create()
 				begin
 		          #Si el titulo posee barras o astericos retorna error.
 		          raise "El nombre posee caracteres inválidos" if Validator.validate_name(name)
@@ -24,14 +33,14 @@ module RN
 				end 
 			end
 
-			def self.confirmar(path,book)
+			def confirmar(path,book)
 				puts (book.eql? "global") ? "¿Vaciar libro global ubicado en #{path}?" : "¿Eliminar libro ubicado en #{path}?"
 				puts "Si / No"
 				opcion = $stdin.gets.chomp
 				return opcion.downcase == "si"
 			end
 
-			def self.delete(name=nil,**options)
+			def delete(**options)
 				begin
 				  if(options[:global])
 				  	path = self.create_path("global")

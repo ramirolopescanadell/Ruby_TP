@@ -39,7 +39,13 @@ module RN
         ]
 
         def call(title:, **options)
-          RN::Models::Note.delete(title,**options)
+          #Si no llegó libro por parametro entonces uso el global
+          bookName = options[:book].nil? ? "global" : options[:book]
+          book = RN::Models::Book.new(bookName)  
+          note = RN::Models::Note.new(title,book.name)  
+          #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
+          return warn "El libro '#{book.name}' no existe " unless book.exist?
+          puts note.delete
         end
       end
 
@@ -56,7 +62,13 @@ module RN
         ]
 
         def call(title:, **options)
-            RN::Models::Note.edit(title,**options)
+          #Si no llegó libro por parametro entonces uso el global
+          bookName = options[:book].nil? ? "global" : options[:book]
+          book = RN::Models::Book.new(bookName)  
+          note = RN::Models::Note.new(title,book.name)  
+          #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
+          return warn "El libro '#{book.name}' no existe " unless book.exist?
+          puts note.edit
         end
       end
 
@@ -74,7 +86,13 @@ module RN
         ]
 
         def call(old_title:, new_title:, **options)
-          RN::Models::Note.retitle(old_title,new_title,**options)
+          #Si no llegó libro por parametro entonces uso el global
+          bookName = options[:book].nil? ? "global" : options[:book]
+          book = RN::Models::Book.new(bookName)  
+          note = RN::Models::Note.new(old_title,book.name)  
+          #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
+          return warn "El libro '#{book.name}' no existe " unless book.exist?
+          puts note.retitle(new_title)
         end
       end
 
@@ -109,7 +127,13 @@ module RN
         ]
 
         def call(title:, **options)
-           RN::Models::Note.show(title,**options)
+          #Si no llegó libro por parametro entonces uso el global
+          bookName = options[:book].nil? ? "global" : options[:book]
+          book = RN::Models::Book.new(bookName)  
+          note = RN::Models::Note.new(title,book.name)  
+          #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
+          return warn "El libro '#{book.name}' no existe " unless book.exist?
+          note.show
         end
       end
     end

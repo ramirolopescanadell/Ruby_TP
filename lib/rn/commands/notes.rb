@@ -133,7 +133,7 @@ module RN
           note = RN::Models::Note.new(title,book.name)  
           #Si el libro seleccionado no existe entonces finaliza la funcion y muestra un error
           return warn "El libro '#{book.name}' no existe " unless book.exist?
-          note.show
+          puts note.show
         end
       end
     end

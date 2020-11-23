@@ -88,9 +88,9 @@ module RN
 				path = self.create_path(book,title)
 				
 				if(File.exist?(path))
-					puts File.read(path)
+					File.read(path)
 				else
-					warn "La nota '#{title}' no existe en el libro '#{book}'"
+					"La nota '#{title}' no existe en el libro '#{book}'"
 				end				
 			end
 		end

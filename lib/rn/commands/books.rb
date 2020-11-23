@@ -41,7 +41,16 @@ module RN
 
         def call(name: nil, **options)
           book =  RN::Models::Book.new(name)
-          book.delete(**options)
+          begin
+            book.delete(**options)
+          rescue RuntimeError => e
+            warn e.message
+          rescue
+            warn "ocurrio un error"
+            raise
+          else
+           puts options[:global] ? "Vaciando carpeta global" : "Eliminando libro con nombre '#{name}'" 
+          end
         end
       end
 
@@ -53,6 +62,7 @@ module RN
         ]
 
         def call(*)
+          puts "Listando libros: "
           RN::Models::Book.list()
         end
       end
@@ -70,9 +80,25 @@ module RN
         ]
 
         def call(old_name:, new_name:, **)
-          RN::Models::Book.rename(old_name, new_name)
+          book =  RN::Models::Book.new(old_name)
+          begin
+            book.rename(new_name)
+          rescue RuntimeError => e
+            warn e.message
+            return :exist
+          rescue Errno::ENOENT
+            warn "El libro que quiere modificar no existe"
+            return :not_exist
+          rescue
+            warn "Ha ocurrido un error"
+            raise
+          else
+            puts "El libro '#{old_name}' ahora se llama '#{new_name}'"
+          end 
         end
+
       end
+
     end
   end
 end

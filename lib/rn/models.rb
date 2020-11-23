@@ -1,7 +1,7 @@
 module RN
 	module Models
-		autoload :Validator, 'rn/clases/validator'
-		autoload :Note, 'rn/clases/notes'
-		autoload :Book, 'rn/clases/books'
+		autoload :Validator, 'rn/models/validator'
+		autoload :Note, 'rn/models/note'
+		autoload :Book, 'rn/models/book'
 	end
 end

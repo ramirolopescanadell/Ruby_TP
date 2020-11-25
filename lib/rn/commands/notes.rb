@@ -1,3 +1,4 @@
+require 'colorputs'
 module RN
   module Commands
     module Notes
@@ -110,7 +111,9 @@ module RN
         ]
 
         def call(**options)
-          RN::Models::Note.list(**options)
+          book = options[:global] ? "global" : options[:book] 
+          puts "Listando notas:"
+          RN::Models::Note.list(book).each{|note| puts note,(note.include?("/") ? :cyan : :red)} 
         end
       end
 
@@ -136,6 +139,38 @@ module RN
           puts note.show
         end
       end
+
+      class Export < Dry::CLI::Command
+        desc 'Export notes'
+
+        argument :note, required: false, desc: 'Title of the note'
+        option :book, type: :string, desc: 'Book'
+        option :all, type: :boolean, default: false, desc: 'List all notes'
+
+        example [
+          '                            # Exports all the notes from the book "global"',
+          '--all                       # Exports all the notes',
+          '"New note" --book "My book" # Export a note titled "New note" from the book "My book"',
+          '--book Memoires             # Exports all notes from the book "Memoires"'
+        ]
+
+        def call(**options)
+          if options[:all]
+            RN::Models::Export.export_all
+            return warn "Exporando todas las notas"
+          end
+          bookName = options[:book].nil? ? "global" : options[:book]
+
+          if(options[:note].nil?)
+            result = RN::Models::Export.export_book(bookName)
+            result.empty? ? (warn "No hay notas para exportar") : (warn "Exportando las notas del libro '#{bookName}'")
+          else
+            puts "Exportando la nota '#{options[:note]}' del libro '#{bookName}'"
+            puts RN::Models::Export.export_note(options[:note],bookName)
+          end
+        end
+      end
+
     end
   end
 end

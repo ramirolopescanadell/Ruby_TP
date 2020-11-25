@@ -41,7 +41,7 @@ module RN
 			end
 
 			def self.list(*)
-	          Dir.glob("#{Validator.my_rns}/**").map{|book| puts book.gsub("#{Validator.my_rns}/",""), :red}				
+	          Dir.glob("#{Validator.my_rns}/**").map{|book| book.gsub("#{Validator.my_rns}/","")}				
 			end
 
 			def rename(new_name, **)
@@ -52,7 +52,6 @@ module RN
 			  raise  "No se puede modificar la carpeta global" if (name.eql? "global") 
 			  Dir.exist?(new_path) ? (raise "El libro con nombre '#{new_name}' ya existe" ) : File.rename(old_path, new_path)
 			end
-
 		end
 	end
 end

@@ -63,7 +63,7 @@ module RN
 
         def call(*)
           puts "Listando libros: "
-          RN::Models::Book.list()
+          RN::Models::Book.list().each{ |book|puts book , :red}
         end
       end
 

@@ -1,5 +1,5 @@
 require 'tty-editor'
-require 'colorputs'
+require 'redcarpet'
 
 module RN
 	module Models
@@ -15,6 +15,10 @@ module RN
 
 			def create_path(book, title)
 				return "#{Validator.my_rns}/#{book}/#{title}.rn"
+			end
+
+			def create_path_export(book, title)
+				return "#{Validator.my_exports}/#{book}/#{title}.html"
 			end
 
 			def validate
@@ -74,14 +78,11 @@ module RN
 				end
 			end
 
-			def self.list(**options)
-				book = options[:global] ? "global" : options[:book] 
+			def self.list(book)
 				path_length = ((Validator.my_rns).length) + 1
-				puts "Listando notas:"
 				notes = Dir.glob("#{Validator.my_rns}/#{book}**/*").map {|note| 
-					note[path_length..-1].gsub(".rn"," ") 
-				}
-				notes.each{|note| puts note ,(note.include?("/") ? :cyan : :red)}			
+					note[path_length..-1].gsub(".rn","") 
+				}		
 			end
 
 			def show()
@@ -92,6 +93,24 @@ module RN
 				else
 					"La nota '#{title}' no existe en el libro '#{book}'"
 				end				
+			end
+
+			def export
+				path = self.create_path(book,title)
+				
+				if(File.exist?(path))
+					markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+					result = markdown.render( File.read(path) )
+					path_export = self.create_path_export(book, title)
+					begin
+						File.write(path_export, result)
+					rescue Errno::ENOENT
+						FileUtils.mkdir_p("#{Validator.my_exports}/#{book}")
+						retry
+					end
+				else
+					"La nota '#{title}' no existe en el libro '#{book}'"
+				end	
 			end
 		end
 	end

@@ -3,5 +3,6 @@ module RN
 		autoload :Validator, 'rn/models/validator'
 		autoload :Note, 'rn/models/note'
 		autoload :Book, 'rn/models/book'
+		autoload :Export, 'rn/models/export'
 	end
 end

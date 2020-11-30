@@ -150,6 +150,7 @@ module RN
         example [
           '                            # Exports all the notes from the book "global"',
           '--all                       # Exports all the notes',
+          '"New note"                  # Exports a note title "New note" from the book "global"',
           '"New note" --book "My book" # Export a note titled "New note" from the book "My book"',
           '--book Memoires             # Exports all notes from the book "Memoires"'
         ]
@@ -165,7 +166,6 @@ module RN
             result = RN::Models::Export.export_book(bookName)
             result.empty? ? (warn "No hay notas para exportar") : (warn "Exportando las notas del libro '#{bookName}'")
           else
-            puts "Exportando la nota '#{options[:note]}' del libro '#{bookName}'"
             puts RN::Models::Export.export_note(options[:note],bookName)
           end
         end

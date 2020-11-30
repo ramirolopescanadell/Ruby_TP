@@ -104,6 +104,7 @@ module RN
 					path_export = self.create_path_export(book, title)
 					begin
 						File.write(path_export, result)
+						"Exportando la nota '#{title}' del libro '#{book}'"
 					rescue Errno::ENOENT
 						FileUtils.mkdir_p("#{Validator.my_exports}/#{book}")
 						retry

@@ -21,8 +21,7 @@ Este módulo tiene un método de clase llamado **my_rns** el cual me retorna el 
 Agregué unas sentencias las cuales crean el cajón de notas **.my_rns** en caso de que no exista y el libro .**my_rns/global** en caso de que no exista. 
 
 ## Exportación 
-Las notas a exportar deben utilizar el formato de texto plano **Markdown**.
-Las notas se exportan en formato HTML y se guardan en un directorio llamado **.my_exports** ubicado en el home al igual que el cajón de notas.  Se respeta la estructura de directorios.
+Las notas a exportar deben utilizar el formato de texto plano **Markdown**. Se exportan en formato HTML y se guardan en un directorio llamado **.my_exports** ubicado en el home al igual que el cajón de notas. Se respeta la estructura de directorios.
 
 Para la exportación de notas creé un nuevo comando (Es decir una clase nueva que hereda de **Dry::CLI::Command**) dentro del archivo `commands/notes.rb`. 
 Esta clase recibe 1 argumento opcional y 2 opciones: 
@@ -31,9 +30,9 @@ Esta clase recibe 1 argumento opcional y 2 opciones:
 - **--all**  Es una opción booleana que indica que se desea exportar el cajón de notas completo.
 
 Como usar el comando:
-- Sin ninguna opción ni argumento entonces se exporta el libro global junto con sus notas.
+- Sin ninguna opción ni argumento se exporta el libro global junto con sus notas.
 - Con la opción **--all** se exportan todas las notas (dentro de sus libros) al directorio **.my_exports**.
-- Si solo se envía el nombre de la nota como argumento (sin otra opción) entonces se buscará la nota a exportar en el libro global.
+- Si solo se envía el nombre de la nota como argumento (sin otra opción) se buscará la nota a exportar en el libro global.
 - Si se envía el nombre de la nota como argumento y se especifica un libro con la opción **--book** entonces se exporta la nota de ese libro (dentro del libro).
 - Si solamente se especifica el nombre del libro con la opción **--book** y no se pasa como argumento el nombre de una nota entonces se van a exportar todas las notas del libro especificado.
 

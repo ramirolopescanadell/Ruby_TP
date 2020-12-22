@@ -2,7 +2,6 @@ module RN
 	module Models
 		class Export
 
-
 			def self.export_note(title, book)
 				note = RN::Models::Note.new(title, book)
 				note.export 

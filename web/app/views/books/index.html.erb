@@ -2,18 +2,17 @@
 
 <h1 class="d-flex justify-content-center"> My books</h1>
 <div class="container-fluid">
-  <% @books.in_groups_of(4,false).each do |books| %>
+  <% @books.in_groups_of(4,false).each do |book_group| %>
   <div class="row">
-
-    <% books.each do |book| %>
+    <% book_group.each do |book| %>
     <div class="col-6 col-sm-4 col-xl-3  my-4">
       <div class="card mw-25">
         <div class="card-body">
           <h5 class="card-title d-flex justify-content-center"><%= book.name %></h5>
           <hr>
           <ul class="list-group">
-            <li class="list-group-item"><%= link_to 'Edit', edit_book_path(book) %> </li>
-            <li class="list-group-item"><%= link_to 'Delete', book, method: :delete, data: { confirm: 'Are you sure?' } %></li>
+            <li class="list-group-item"><%= link_to_if book.name != "Global", 'Edit', edit_book_path(book) %> </li>
+            <li class="list-group-item"><%= link_to_if book.name != "Global", 'Delete', book, method: :delete, data: { confirm: 'Are you sure?' } %></li>
             <li class="list-group-item"><%= link_to 'Show', book %></li>
           </ul>
         </div>

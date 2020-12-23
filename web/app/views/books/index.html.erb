@@ -6,16 +6,16 @@
   <div class="row">
 
     <% books.each do |book| %>
-    <div class="col m-4">
+    <div class="col-6 col-sm-4 col-xl-3  my-4">
       <div class="card mw-25">
         <div class="card-body">
           <h5 class="card-title d-flex justify-content-center"><%= book.name %></h5>
           <hr>
-          <lu>
-            <li><%= link_to 'Edit', edit_book_path(book) %> </li>
-            <li><%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %></li>
-            <li><%= link_to 'Show', book %></li>
-          </lu>
+          <ul class="list-group">
+            <li class="list-group-item"><%= link_to 'Edit', edit_book_path(book) %> </li>
+            <li class="list-group-item"><%= link_to 'Delete', book, method: :delete, data: { confirm: 'Are you sure?' } %></li>
+            <li class="list-group-item"><%= link_to 'Show', book %></li>
+          </ul>
         </div>
         <div class="card-footer">
           <small class="text-muted">Created at: <%= book.created_at.strftime("%d/%m/%Y") %> </small>
@@ -23,8 +23,7 @@
       </div>
     </div>
     <% end %>
-
+    <hr>
   </div>
   <% end %>
 </div>
-<%= link_to 'New Book', new_book_path %>

@@ -5,3 +5,14 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+(1..5).each do |i|
+	user = User.create name: "name#{i}", email: "email#{i}",password: "password#{i}"
+	
+	(1..10).each do |b|
+		book = user.book.create name: "book#{b}"
+
+		(1..10).each do |n|
+			book.note.create name: "Note#{n}", content: "contenido"
+		end
+	end
+end	

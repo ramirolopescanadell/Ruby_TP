@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Books</h1>
+<div class="container-fluid">
+  <% @books.in_groups_of(4,false).each do |books| %>
+  <div class="row">
+
+    <% books.each do |book| %>
+    <div class="col m-4">
+      <div class="card mw-25">
+        <div class="card-body">
+          <h5 class="card-title d-flex justify-content-center"><%= book.name %></h5>
+          <hr>
+          <lu>
+            <li><%= link_to 'Edit', edit_book_path(book) %> </li>
+            <li><%= link_to 'Destroy', book, method: :delete, data: { confirm: 'Are you sure?' } %></li>
+            <li><%= link_to 'Show', book %></li>
+          </lu>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">Created at: <%= book.created_at.strftime("%d/%m/%Y") %> </small>
+        </div>
+      </div>
+    </div>
+    <% end %>
+
+  </div>
+  <% end %>
+</div>
+<%= link_to 'New Book', new_book_path %>

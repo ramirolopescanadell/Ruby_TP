@@ -1,6 +1,13 @@
-<h1>Editing Note</h1>
+<div class="d-flex justify-content-center align-items-center container mt-4">
+	<div class="row text-light bg-dark w-100">
+		<div class="col-sm-10 offset-sm-1">
+			<h1 class="my-4 text-center">Edit Note</h1>
 
-<%= render 'form', note: @note %>
+			<%= render 'form', note: @note %>
 
-<%= link_to 'Show', @note %> |
-<%= link_to 'Back', notes_path %>
+			<div class="mb-4">
+				<%= link_to 'Back', notes_path %>
+			</div>
+		</div>
+	</div>
+</div>

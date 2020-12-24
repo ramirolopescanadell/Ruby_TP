@@ -1,22 +1,22 @@
 <%= form_with(model: book, local: true) do |form| %>
-  <% if book.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(book.errors.count, "error") %> prohibited this book from being saved:</h2>
+<% if book.errors.any? %>
+<div id="error_explanation">
+  <h2><%= pluralize(book.errors.count, "error") %> prohibited this book from being saved:</h2>
 
-      <ul>
-        <% book.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
+  <ul>
+    <% book.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+<div class="form-group">
   <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
+    <%= form.label :name%>
+    <%= form.text_field :name, class: "form-control" ,  autocomplete: 'off'%>
   </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+</div>
+<div class="actions">
+  <%= form.submit  class: "btn btn-primary" %>
+</div>
 <% end %>

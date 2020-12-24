@@ -6,5 +6,8 @@ class Book < ApplicationRecord
   validates_uniqueness_of :name, scope: :user_id
 
   scope :books_per_user, -> (user_id){ where("user_id == ?",user_id )} 
-  scope :empty, -> (id){where("id == ?", id).delete_all}
+  
+  def empty
+  	Note.empty(self.id)
+  end
 end

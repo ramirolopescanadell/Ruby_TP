@@ -16,10 +16,12 @@ class NotesController < ApplicationController
   # GET /notes/new
   def new
     @note = Note.new
+    @books = current_user.books.map{|book| [book.name, book.id]}
   end
 
   # GET /notes/1/edit
   def edit
+    @books = current_user.books.map{|book| [book.name, book.id]}
   end
 
   # POST /notes
@@ -70,6 +72,6 @@ class NotesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def note_params
-      params.require(:note).permit(:name, :content)
+      params.require(:note).permit(:name, :content, :book_id)
     end
 end

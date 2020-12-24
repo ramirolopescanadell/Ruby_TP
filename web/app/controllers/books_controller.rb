@@ -31,7 +31,7 @@ class BooksController < ApplicationController
 
     respond_to do |format|
       if @book.save
-        format.html { redirect_to @book, notice: 'Book was successfully created.' }
+        format.html { redirect_to books_path, notice: 'Book was successfully created.' }
         format.json { render :show, status: :created, location: @book }
       else
         format.html { render :new }
@@ -71,15 +71,6 @@ class BooksController < ApplicationController
         format.json { head :no_content }
       end
     else
-      respond_to do |format|
-        format.html { redirect_to books_url, alert: "Can't destroy Global book" }
-        format.json { head :no_content }      
-       end
-    end
-  end
-
-  def empty
-    if @book.name == "Global"
       @book.empty
       respond_to do |format|
         format.html { redirect_to books_url, notice: 'Book was successfully empty.' }

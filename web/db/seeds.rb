@@ -8,10 +8,10 @@
 (1..5).each do |i|
 	user = User.create! name: "name#{i}", email: "email#{i}@hotmail.com",password: "password#{i}"
 	
-	(1..10).each do |b|
+	(1..5).each do |b|
 		book = user.books.create! name: "book#{b}"
 
-		(1..10).each do |n|
+		(1..5).each do |n|
 			book.note.create! name: "Note#{n}", content: "contenido"
 		end
 	end

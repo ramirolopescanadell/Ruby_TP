@@ -1,27 +1,41 @@
 <%= form_with(model: note, local: true) do |form| %>
-  <% if note.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(note.errors.count, "error") %> prohibited this note from being saved:</h2>
+<% if note.errors.any? %>
+<div id="error_explanation">
+  <h2><%= pluralize(note.errors.count, "error") %> prohibited this note from being saved:</h2>
 
-      <ul>
-        <% note.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+  <ul>
+    <% note.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+<div class="row">
+  <div class="col form-group">
+    <div class="field">
+      <%= form.label :name%>
+      <%= form.text_field :name, class: "form-control" ,  autocomplete: 'off'%>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
   </div>
-
+  <div class="col form-group">
+    <div class="field">
+      <%= form.label :Book%>
+      <%= form.select :book_id, @books ,{autocomplete: 'off'}, class: "form-control"  %>
+    </div>
+  </div>
+</div>
+<div class="form-group">
   <div class="field">
     <%= form.label :content %>
-    <%= form.text_area :content %>
+    <%= form.text_area :content, class: "form-control text_area" , autocomplete: 'off', rows: 8%>
   </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
+</div>
+<div class="actions">
+  <%= form.submit class: "btn btn-primary" %>
+</div>
 <% end %>
+<style>
+  .text_area{
+    height: 100%;
+  }
+</style>

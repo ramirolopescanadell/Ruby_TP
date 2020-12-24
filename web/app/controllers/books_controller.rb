@@ -11,6 +11,7 @@ class BooksController < ApplicationController
   # GET /books/1
   # GET /books/1.json
   def show
+    @notes = Note.notes_per_book(@book.id)
   end
 
   # GET /books/new
@@ -74,6 +75,16 @@ class BooksController < ApplicationController
         format.html { redirect_to books_url, alert: "Can't destroy Global book" }
         format.json { head :no_content }      
        end
+    end
+  end
+
+  def empty
+    if @book.name == "Global"
+      @book.empty
+      respond_to do |format|
+        format.html { redirect_to books_url, notice: 'Book was successfully empty.' }
+        format.json { head :no_content }
+      end
     end
   end
 

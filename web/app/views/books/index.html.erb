@@ -1,5 +1,4 @@
 <p id="notice"><%= notice %></p>
-
 <h1 class="d-flex justify-content-center"> My books</h1>
 <div class="container-fluid">
   <% @books.in_groups_of(4,false).each do |book_group| %>
@@ -12,7 +11,11 @@
           <hr>
           <ul class="list-group">
             <li class="list-group-item"><%= link_to_if book.name != "Global", 'Edit', edit_book_path(book) %> </li>
-            <li class="list-group-item"><%= link_to_if book.name != "Global", 'Delete', book, method: :delete, data: { confirm: 'Are you sure?' } %></li>
+            <% if book.name == "Global"%>
+              <li class="list-group-item"><%= link_to 'Empty', book, method: :empty, data: { confirm: 'Empty book?' } %></li>
+            <% else %>
+             <li class="list-group-item"><%= link_to 'Delete', book, method: :delete, data: { confirm: 'Delete book?' } %></li>
+            <% end %>
             <li class="list-group-item"><%= link_to 'Show', book %></li>
           </ul>
         </div>

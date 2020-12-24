@@ -12,7 +12,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
      super
-     Book.create(name: 'Global', user_id: current_user.id)
+     Book.create(name: "Global", user_id: current_user.id)
   end
 
   # GET /resource/edit

@@ -1,6 +1,12 @@
-<h1>Editing Book</h1>
+<div class="d-flex justify-content-center align-items-center container mt-5">
+	<div class="row p-4 text-light bg-dark">
+		<div class="col-sm-10 offset-sm-1">
+			<h1 class="my-4">Editing Book</h1>
 
-<%= render 'form', book: @book %>
+			<%= render 'form', book: @book %>
 
-<%= link_to 'Show', @book %> |
-<%= link_to 'Back', books_path %>
+			<%= link_to 'Show', @book %> |
+			<%= link_to 'Back', :back %>
+		</div>
+	</div>
+</div>

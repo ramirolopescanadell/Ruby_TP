@@ -1,14 +1,20 @@
 <p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Name:</strong>
-  <%= @note.name %>
-</p>
-
-<p>
-  <strong>Content:</strong>
-  <%= @note.content %>
-</p>
-
-<%= link_to 'Edit', edit_note_path(@note) %> |
-<%= link_to 'Back', :back %>
+<div class="container text-light bg-dark w-100 mt-4 px-5 py-4">
+	<div class="row ">
+		<div class="col-sm-10">
+			<h2>
+				<strong>Name:</strong>
+				<%= @note.name %>
+			</h2>
+		</div>
+		<div class="col d-flex justify-content-end my-2">
+			<%= link_to 'Edit', edit_note_path(@note) , class:"text-light mx-2" %> |
+			<%= link_to 'Back', :back , class:"text-light mx-2"%>
+		</div>
+	</div>
+	<div class="row border rounded mt-2 p-4">
+		<div class="col">
+			<%=  sanitize @content%>
+		</div>
+	</div>
+</div>

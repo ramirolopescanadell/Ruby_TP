@@ -1,3 +1,4 @@
+require 'redcarpet'
 class Note < ApplicationRecord
 	belongs_to :book
 
@@ -6,4 +7,5 @@ class Note < ApplicationRecord
 	
 	scope :notes_per_book, -> (book_id){where("book_id == ?", book_id)}
 	scope :empty, -> (book_id){where("book_id == ?", book_id).delete_all}
+
 end

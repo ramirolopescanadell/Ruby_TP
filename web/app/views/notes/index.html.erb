@@ -1,0 +1,40 @@
+<p id="notice"><%= notice %></p>
+<h1 class="d-flex justify-content-center"> My notes</h1>
+<div class="container-fluid">
+  <% @notes.in_groups_of(4,false).each do |notes_group| %>
+  <div class="row">
+    <% notes_group.each do |note| %>
+    <div class="col-6 col-sm-4 col-xl-3  my-4">
+      <div class="card mw-25">
+        <div class="card-body">
+          <h5 class="card-title d-flex justify-content-center"><%= note.name %></h5>
+          <hr>
+          <h6> Belongs to: <%= link_to note.book_name , note.book %> </h6>
+          <ul class="list-group ">
+            <li class="list-group-item content">
+              <%= note.content %>
+            </li>
+            <ul class=" list-group list-group-horizontal d-flex">
+              <li class="list-group-item flex-fill"><%= link_to 'Edit', edit_note_path(note) %> </li>
+              <li class="list-group-item flex-fill"><%= link_to 'Delete', note, method: :delete, data: { confirm: 'Delete note?' } %></li>
+              <li class="list-group-item flex-fill"><%= link_to 'Show', note %></li>
+            </ul>
+          </ul>
+        </div>
+        <div class="card-footer">
+          <small class="text-muted">Created at: <%= note.created_at.strftime("%d/%m/%Y") %> </small>
+        </div>
+      </div>
+    </div>
+    <% end %>
+    <hr>
+  </div>
+  <% end %>
+</div>
+<style>
+  .content{
+    height: 10rem; 
+    overflow: hidden;
+    white-space:break-word; /* Don't forget this one */
+    text-overflow: ellipsis;
+  </style>

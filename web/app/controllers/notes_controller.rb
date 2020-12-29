@@ -66,8 +66,14 @@ class NotesController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_note
+    def set_note 
       @note = Note.find(params[:id])
+      rescue ActiveRecord::RecordNotFound => e
+        render :'errors/invalid_id', status: :bad_request, :layout => false
+      else
+        if(@note.book.user_id != current_user.id)
+          render :'errors/403', status: :forbidden, :layout => false
+        end
     end
 
     # Only allow a list of trusted parameters through.

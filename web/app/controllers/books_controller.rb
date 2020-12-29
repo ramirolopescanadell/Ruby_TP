@@ -83,6 +83,9 @@ class BooksController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_book
       @book = Book.find(params[:id])
+      if(@book.user_id != current_user.id)
+        render :'errors/403', status: :forbidden, :layout => false
+      end
     end
 
     # Only allow a list of trusted parameters through.

@@ -5,15 +5,12 @@ class NotesController < ApplicationController
   # GET /notes
   # GET /notes.json
   def index
-    @notes = Note.notes_per_user(current_user.id)
-    puts @notes.instance_methods
+    @notes = Note.notes_per_user(current_user.id)  
   end
 
   # GET /notes/1
   # GET /notes/1.json
   def show
-    markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
-    @content = markdown.render( @note.content )
   end
 
   # GET /notes/new

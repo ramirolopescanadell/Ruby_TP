@@ -7,7 +7,7 @@
     <div class="col-6 col-sm-4 col-xl-3  my-4">
       <div class="card mw-25">
         <div class="card-body">
-          <h5 class="card-title d-flex justify-content-center"><%= book.name %></h5>
+          <h4 class="card-title d-flex justify-content-center"><%= book.name %></h4>
           <hr>
           <ul class="list-group">
             <li class="list-group-item"><%= link_to_if book.name != "Global", 'Edit', edit_book_path(book) %> </li>

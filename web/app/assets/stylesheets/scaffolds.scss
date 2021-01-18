@@ -37,7 +37,6 @@ div.actions {
   display: table; }
 
 #error_explanation {
-  width: 450px;
   border: 2px solid red;
   padding: 7px 7px 0;
   margin-bottom: 20px;
@@ -54,7 +53,8 @@ div.actions {
 
 #error_explanation ul li {
   font-size: 12px;
-  list-style: square; }
+  list-style: square;
+  color:black; }
 
 label {
   display: block; }

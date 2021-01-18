@@ -12,16 +12,16 @@ class NotesController < ApplicationController
   # GET /notes/1.json
   def show
   end
-
+  
   # GET /notes/new
   def new
     @note = Note.new
-    @books = current_user.books.map{|book| [book.name, book.id]}
+    @books =  my_books
   end
 
   # GET /notes/1/edit
   def edit
-    @books = current_user.books.map{|book| [book.name, book.id]}
+    @books =  my_books
   end
 
   # POST /notes
@@ -34,6 +34,7 @@ class NotesController < ApplicationController
         format.html { redirect_to @note, notice: 'Note was successfully created.' }
         format.json { render :show, status: :created, location: @note }
       else
+        @books =  my_books
         format.html { render :new }
         format.json { render json: @note.errors, status: :unprocessable_entity }
       end
@@ -48,6 +49,7 @@ class NotesController < ApplicationController
         format.html { redirect_to @note, notice: 'Note was successfully updated.' }
         format.json { render :show, status: :ok, location: @note }
       else
+        @books =  my_books
         format.html { render :edit }
         format.json { render json: @note.errors, status: :unprocessable_entity }
       end
@@ -80,4 +82,8 @@ class NotesController < ApplicationController
     def note_params
       params.require(:note).permit(:name, :content, :book_id)
     end
+
+    def my_books
+      current_user.books.map{|book| [book.name, book.id]}
+    end 
 end
